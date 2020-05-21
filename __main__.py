@@ -94,3 +94,20 @@ print()
 
 # sns.distplot(returns_C_2008, bins=100)
 # plt.savefig('output/returns_C_2008.png')
+
+# MORE VISUALIZATION
+stock_close = bank_stocks.xs('Close', axis=1, level=1).reset_index()
+get_head(stock_close)
+
+# Lineplot for stock values
+# fig = plt.figure(figsize=(15,5))
+# for tick in tickers:
+#     sns.lineplot(data=stock_close, x='Date', y=tick, label=tick)
+
+# plt.set_cmap('viridis')
+# plt.ylabel('Price (USD)')
+# plt.grid(b=True)
+# plt.savefig('output/stock_close.png')
+
+
+# Moving Averages
