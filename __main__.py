@@ -87,16 +87,17 @@ print()
 # plt.savefig('output/return_2015.png')
 
 # Dist plot of C Return in 2008
-# returns_C_2008 = stock_returns['C Return'].loc[
-#     (stock_returns.index > datetime(2007, 12, 31)) &
-#     (stock_returns.index < datetime(2009, 1, 1))
-# ]
+returns_C_2008 = stock_returns['C Return'].loc[
+    (stock_returns.index > datetime(2007, 12, 31)) &
+    (stock_returns.index < datetime(2009, 1, 1))
+]
+get_head(returns_C_2008)
 
 # sns.distplot(returns_C_2008, bins=100)
 # plt.savefig('output/returns_C_2008.png')
 
 # MORE VISUALIZATION
-stock_close = bank_stocks.xs('Close', axis=1, level=1).reset_index()
+stock_close = bank_stocks.xs('Close', axis=1, level='Stock Info').reset_index()
 get_head(stock_close)
 
 # Lineplot for stock values
@@ -111,3 +112,41 @@ get_head(stock_close)
 
 
 # Moving Averages
+plt.figure(figsize=(12,6))
+stock_close_bac = stock_close[['Date', 'BAC']][
+    (stock_close['Date'] > datetime(2007, 12, 31)) &
+    (stock_close['Date'] < datetime(2009, 1, 1))
+]
+get_head(stock_close_bac)
+
+def geometric_mean(values):
+    product = 1
+    for value in values:
+        product *= value
+
+    return product ** (1/len(values))
+
+stock_close_bac['20Day'] = stock_close_bac['BAC'].rolling(window=20).mean()
+stock_close_bac['5Day'] = stock_close_bac['BAC'].rolling(
+    window=5
+).apply(
+    geometric_mean,
+    raw=True
+)
+print(stock_close_bac.tail())
+print()
+
+# sns.lineplot(data=stock_close_bac, x='Date', y='BAC', label='BAC')
+# sns.lineplot(data=stock_close_bac, x='Date', y='20Day', label='20 day avg')
+# sns.lineplot(data=stock_close_bac, x='Date', y='5Day', label='5 day avg')
+# plt.savefig('output/stock_close_bac.png')
+
+# Heatmap with Close Price correlation
+close_price = bank_stocks.xs('Close', axis=1, level='Stock Info')
+get_head(close_price)
+
+# sns.heatmap(close_price.corr(), cmap='coolwarm', annot=True)
+# plt.savefig('output/correlation_heatmap.png')
+
+# sns.clustermap(close_price.corr(), cmap='coolwarm', annot=True)
+# plt.savefig('output/correlation_clustermap.png')
