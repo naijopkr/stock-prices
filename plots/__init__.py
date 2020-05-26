@@ -51,14 +51,10 @@ def moving_average(
     name='moving_average'
 ):
     data[f'{regular}Day'] = data[key].rolling(window=regular).mean()
-    print(data.head())
-    input()
     data[f'{geo}Day'] = data[key].rolling(window=geo).apply(
         geometric_mean,
         raw=True
     )
-    print(data.tail())
-    input()
 
     plt.figure(figsize=(12,6))
     sns.lineplot(
@@ -100,10 +96,26 @@ def candlestick(data: DataFrame, name='candlestick'):
         open=data['Open'],
         high=data['High'],
         low=data['Low'],
-        close=data['Close']
+        close=data['Close'],
     )
 
-    candlestick_plot = go.Figure(data=candlestick_data)
+    ma5 = data['Close'].rolling(window=5).mean()
+    ma20 = data['Close'].rolling(window=20).mean()
+
+    ma5_data = go.Scatter(x=data.index, y=ma5, line=dict(
+        color='orange',
+        width=1
+    ))
+    ma20_data = go.Scatter(x=data.index, y=ma20, line=dict(
+        color='green',
+        width=1
+    ))
+
+    candlestick_plot = go.Figure(data=[
+        candlestick_data,
+        ma5_data,
+        ma20_data
+    ])
 
     pio.write_html(
         candlestick_plot,
