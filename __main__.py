@@ -118,5 +118,10 @@ plots.moving_average(stock_close_bac, key='BAC')
 plots.heatmap(close_price_corr)
 plots.clustermap(close_price_corr)
 
+
 # Create a candlestick plot for Bank of America
 plots.candlestick(bac_2015, 'bac_2015')
+
+
+# Create a candlestick plot with Bollinger Band
+plots.candlestick_boll(bac_2015, 'bac_2015_boll')

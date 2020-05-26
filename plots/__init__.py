@@ -122,3 +122,52 @@ def candlestick(data: DataFrame, name='candlestick'):
         f'{ROOT}/output/{name}.html',
         auto_open=True
     )
+
+
+def candlestick_boll(data: DataFrame, name='dataframe_boll'):
+    candlestick_data = go.Candlestick(
+        x=data.index,
+        open=data['Open'],
+        high=data['High'],
+        low=data['Low'],
+        close=data['Close'],
+    )
+
+    ma20 = data['Close'].rolling(window=20).mean()
+    k_sigma = data['Close'].rolling(window=20).std() * 2
+    upper = ma20 + k_sigma
+    lower = ma20 - k_sigma
+
+    ma20_data = go.Scatter(x=data.index, y=ma20, line=dict(
+        color='blue',
+        width=1
+    ))
+    upper_band = go.Scatter(
+        x=data.index,
+        y=upper,
+        line=dict(
+            color='red',
+            width=1
+        )
+    )
+    lower_band = go.Scatter(
+        x=data.index,
+        y=lower,
+        line=dict(
+            color='green',
+            width=1
+        )
+    )
+
+    candlestick_plot = go.Figure(data=[
+        candlestick_data,
+        upper_band,
+        ma20_data,
+        lower_band
+    ])
+
+    pio.write_html(
+        candlestick_plot,
+        f'{ROOT}/output/{name}.html',
+        auto_open=True
+    )
