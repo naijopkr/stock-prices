@@ -1,6 +1,8 @@
 import seaborn as sns
 import matplotlib.pyplot as plt
 import os
+import plotly.graph_objects as go
+import plotly.io as pio
 
 from pandas import DataFrame
 from math_utils import geometric_mean
@@ -90,3 +92,21 @@ def clustermap(data: DataFrame, name='clustermap'):
     plt.figure()
     sns.clustermap(data, cmap='coolwarm', annot=True)
     plt.savefig(f'{ROOT}/output/{name}.png')
+
+
+def candlestick(data: DataFrame, name='candlestick'):
+    candlestick_data = go.Candlestick(
+        x=data.index,
+        open=data['Open'],
+        high=data['High'],
+        low=data['Low'],
+        close=data['Close']
+    )
+
+    candlestick_plot = go.Figure(data=candlestick_data)
+
+    pio.write_html(
+        candlestick_plot,
+        f'{ROOT}/output/{name}.html',
+        auto_open=True
+    )

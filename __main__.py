@@ -68,6 +68,12 @@ stock_close_bac = eda.slice_dated_index(
 
 close_price_corr = stock_close.corr()
 
+bac_2015 = eda.slice_dated_index(
+    stock_data['BAC'],
+    datetime(2015, 1, 1),
+    datetime(2016, 1, 1)
+)
+"""
 # Print subsets heads
 get_head(bank_stocks)
 get_head(stock_returns)
@@ -111,3 +117,6 @@ plots.moving_average(stock_close_bac, key='BAC')
 # Heatmap and Clustermap with Close Price correlation
 plots.heatmap(close_price_corr)
 plots.clustermap(close_price_corr)
+"""
+# Create a candlestick plot for Bank of America
+plots.candlestick(bac_2015, 'bac_2015')
