@@ -97,19 +97,30 @@ def candlestick(data: DataFrame, name='candlestick'):
         high=data['High'],
         low=data['Low'],
         close=data['Close'],
+        name='BAC'
     )
 
     ma5 = data['Close'].rolling(window=5).mean()
     ma20 = data['Close'].rolling(window=20).mean()
 
-    ma5_data = go.Scatter(x=data.index, y=ma5, line=dict(
-        color='orange',
-        width=1
-    ))
-    ma20_data = go.Scatter(x=data.index, y=ma20, line=dict(
-        color='green',
-        width=1
-    ))
+    ma5_data = go.Scatter(
+        x=data.index,
+        y=ma5,
+        name='MA5',
+        line=dict(
+            color='orange',
+            width=1
+        )
+    )
+    ma20_data = go.Scatter(
+        x=data.index,
+        y=ma20,
+        name='MA20',
+        line=dict(
+            color='green',
+            width=1
+        )
+    )
 
     candlestick_plot = go.Figure(data=[
         candlestick_data,
@@ -131,6 +142,7 @@ def candlestick_boll(data: DataFrame, name='dataframe_boll'):
         high=data['High'],
         low=data['Low'],
         close=data['Close'],
+        name='BAC'
     )
 
     ma20 = data['Close'].rolling(window=20).mean()
@@ -138,13 +150,19 @@ def candlestick_boll(data: DataFrame, name='dataframe_boll'):
     upper = ma20 + k_sigma
     lower = ma20 - k_sigma
 
-    ma20_data = go.Scatter(x=data.index, y=ma20, line=dict(
-        color='blue',
-        width=1
-    ))
+    ma20_data = go.Scatter(
+        x=data.index,
+        y=ma20,
+        name='MA20',
+        line=dict(
+            color='blue',
+            width=1
+        )
+    )
     upper_band = go.Scatter(
         x=data.index,
         y=upper,
+        name='upperBB',
         line=dict(
             color='red',
             width=1
@@ -153,6 +171,7 @@ def candlestick_boll(data: DataFrame, name='dataframe_boll'):
     lower_band = go.Scatter(
         x=data.index,
         y=lower,
+        name='lowerBB',
         line=dict(
             color='green',
             width=1
